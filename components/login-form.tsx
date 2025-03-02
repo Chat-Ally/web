@@ -36,7 +36,7 @@ export function LoginForm({
     }
 
     return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <div className={cn("flex flex-col gap-6 max-w-96 mx-auto", className)} {...props}>
             <Card className="overflow-hidden">
                 <CardContent className="grid p-0 ">
                     <form className="p-6 md:p-8">
@@ -82,13 +82,13 @@ export function LoginForm({
                             >
                                 Login
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant="default"
                                 className="w-full"
                                 onClick={signUp}
                             >
                                 Register
-                            </Button>
+                            </Button> */}
                             <div className="text-center text-sm">
                                 Don&apos;t have an account?{" "}
                                 <a href="#" className="underline underline-offset-4">
