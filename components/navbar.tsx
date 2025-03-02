@@ -1,16 +1,10 @@
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuIndicator,
-    NavigationMenuItem,
     NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger, navigationMenuTriggerStyle,
-    NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import React from "react"
+import { Button } from "./ui/button"
 
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
@@ -37,100 +31,22 @@ const ListItem = React.forwardRef<
     )
 })
 
-const components: { title: string; href: string; description: string }[] = [
-    {
-        title: "Alert Dialog",
-        href: "/docs/primitives/alert-dialog",
-        description:
-            "A modal dialog that interrupts the user with important content and expects a response.",
-    },
-    {
-        title: "Hover Card",
-        href: "/docs/primitives/hover-card",
-        description:
-            "For sighted users to preview content available behind a link.",
-    },
-    {
-        title: "Progress",
-        href: "/docs/primitives/progress",
-        description:
-            "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-    },
-    {
-        title: "Scroll-area",
-        href: "/docs/primitives/scroll-area",
-        description: "Visually or semantically separates content.",
-    },
-    {
-        title: "Tabs",
-        href: "/docs/primitives/tabs",
-        description:
-            "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-    },
-    {
-        title: "Tooltip",
-        href: "/docs/primitives/tooltip",
-        description:
-            "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-    },
-]
-
 export default function Navbar() {
     return (
-        <nav className="flex justify-center">
-            <NavigationMenu>
-                <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                                <li className="row-span-3">
-                                    <NavigationMenuLink asChild>
-                                        <a
-                                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                            href="/"
-                                        >
-                                            <div className="mb-2 mt-4 text-lg font-medium">
-                                                shadcn/ui
-                                            </div>
-                                            <p className="text-sm leading-tight text-muted-foreground">
-                                                Beautifully designed components built with Radix UI and
-                                                Tailwind CSS.
-                                            </p>
-                                        </a>
-                                    </NavigationMenuLink>
-                                </li>
-                                <ListItem href="/docs" title="Introduction">
-                                    Re-usable components built using Radix UI and Tailwind CSS.
-                                </ListItem>
-                                <ListItem href="/docs/installation" title="Installation">
-                                    How to install dependencies and structure your app.
-                                </ListItem>
-                                <ListItem href="/docs/primitives/typography" title="Typography">
-                                    Styles for headings, paragraphs, lists...etc
-                                </ListItem>
-                            </ul>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                {components.map((component) => (
-                                    <ListItem
-                                        key={component.title}
-                                        title={component.title}
-                                        href={component.href}
-                                    >
-                                        {component.description}
-                                    </ListItem>
-                                ))}
-                            </ul>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
-            </NavigationMenu>
-
+        <nav className="absolute w-full z-20 ">
+            <div className="lg:max-w-screen-xl flex justify-between items-center mx-auto p-2">
+                <Link href="/">
+                    <h2 className="text-lg sm:text-4xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-0" >enwhats</h2>
+                </Link>
+                <div className="flex">
+                    <Link href="/auth" className="mr-2">
+                        <Button variant="secondary">Entrar</Button>
+                    </Link>
+                    <Link href="/auth">
+                        <Button>Registrarme</Button>
+                    </Link>
+                </div>
+            </div>
         </nav>
     )
 }
