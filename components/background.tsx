@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react"
 
-
 interface HeroTitleProps {
   children: ReactNode,
   alignment: "text-left" | "text-center" | "text-right"
@@ -17,7 +16,8 @@ export function HeroTitle({ children, alignment }: HeroTitleProps) {
 
 export function HeroSubtitle() {
   return (
-    <p className="text-lg md:text-3xl">Dale superpoderes de venta a tu WhatsApp: <br />
+    <p className="text-lg text-white md:text-3xl">
+      Dale superpoderes de venta a tu WhatsApp: <br />
       Automatiza mensajes, toma ordenes y resuelve dudas. </p>
   )
 }
