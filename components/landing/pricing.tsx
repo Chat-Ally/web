@@ -13,7 +13,7 @@ const Pricing = () => {
                 </div>
 
                 <div className=" flex flex-wrap justify-center mt-8">
-                    <div className="grid md:grid-cols-3 space-y-8 md:gap-16 w-full px-6 ">
+                    <div className="grid md:grid-cols-3 space-y-8 md:space-y-0 md:gap-16 w-full px-6 ">
                         <PricingCard
                             type="Gratuito"
                             price="Gratis"
