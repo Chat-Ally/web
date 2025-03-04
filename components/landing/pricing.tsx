@@ -13,7 +13,7 @@ const Pricing = () => {
                 </div>
 
                 <div className=" flex flex-wrap justify-center mt-8">
-                    <div className="grid md:grid-cols-3 md:gap-16 w-full px-6 ">
+                    <div className="grid md:grid-cols-3 space-y-8 md:gap-16 w-full px-6 ">
                         <PricingCard
                             type="Gratuito"
                             price="Gratis"
@@ -105,17 +105,14 @@ const PricingCard = ({
                                     href="/#"
                                     className={` ${active
                                         ? "block w-full rounded-md border border-slate-800 bg-primary p-3 text-center text-base font-medium text-white transition hover:bg-opacity-90 hover:bg-gray-50"
-                                        : "block w-full rounded-md border border-slate-800 bg-transparent p-3 text-center text-base font-medium text-primary transition hover:border-primary hover:bg-slate-400 hover:text-white dark:border-dark-3"
+                                        : "block w-full rounded-md border border-slate-800 bg-transparent p-3 text-center text-base font-medium text-primary transition hover:border-primary hover:bg-black hover:text-white dark:border-dark-3"
                                         } `}
                                 >
                                     {buttonText}
                                 </a>
-
-
                         }
                     </div>
                     <div className="mb-9 flex flex-col gap-[14px]">{children}</div>
-
                     <div></div>
                 </div>
             </div >
