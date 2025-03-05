@@ -33,32 +33,43 @@ export const columns: ColumnDef<Product>[] = [
     }
 ]
 
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
-    
-    let { data, error } = await supabase.from("products").select("*").eq("business_id", 1)
-    
+    const { data, error } = await supabase.auth.getUser()
+    if (error || !data) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    let { data: productData, error: productError } = await supabase.from("products").select("*").eq("business_id", 1)
+    if (productError) console.error('dashboard/products/index' + productError)
+
     return {
         props: {
-            data: data
+            data: productData,
+            user: {
+                email: data.user.email,
+                name: 'name',
+                avatar: 'avatar'
+            }
         }
     }
 }
 
-export default function Products(data: any) {
-    console.log(data)
-    const [products, setProducts] = useState(data.data)
-    
-    function updateProductList(newProduct: any){
+export default function Products({ data, user }: { data: any, user: any }) {
+    const [products, setProducts] = useState(data)
+
+    function updateProductList(newProduct: any) {
         setProducts([...products, newProduct])
     }
     return (
-        <Layout>
+        <Layout user={user}>
             <div className="flex justify-between">
-
-            <CreateProductDialog onProductCreated={updateProductList} />
-            <>Products</>
+                <CreateProductDialog onProductCreated={updateProductList} />
             </div>
             <DataTable columns={columns} data={products} />
         </Layout>

@@ -4,13 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Layout from "./layout"
 import { createClient } from "@/lib/supabase/server-props"
 import { GetServerSidePropsContext } from "next"
-import { m } from "motion/react"
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
-
     const { data, error } = await supabase.auth.getUser()
-
     if (error || !data) {
         return {
             redirect: {
@@ -19,8 +16,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             }
         }
     }
-
-    console.log(data)
 
     return {
         props: {
