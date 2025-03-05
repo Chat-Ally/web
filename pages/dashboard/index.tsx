@@ -1,13 +1,41 @@
-"use client"
-
 import { BigChart } from "@/components/big-chart"
 import { TypographyH1 } from "@/components/h1"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Layout from "./layout"
+import { createClient } from "@/lib/supabase/server-props"
+import { GetServerSidePropsContext } from "next"
+import { m } from "motion/react"
 
-export default function Index() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const supabase = createClient(context)
+
+    const { data, error } = await supabase.auth.getUser()
+
+    if (error || !data) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    console.log(data)
+
+    return {
+        props: {
+            user: {
+                email: data.user.email,
+                name: 'test name',
+                avatar: 'test avatar'
+            }
+        }
+    }
+}
+
+export default function Index({ user }: { user: any }) {
     return (
-        <Layout>
+        <Layout user={user}>
             <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                 <Card>
                     <CardHeader>

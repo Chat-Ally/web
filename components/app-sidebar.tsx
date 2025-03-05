@@ -20,7 +20,6 @@ import {
 import { NavMain } from "./nav-main"
 import { ModeToggle } from "./toggle-theme"
 
-// This is sample data.
 const data = {
     projects: [
         {
@@ -41,7 +40,7 @@ const data = {
         {
             title: "Productos",
             url: "/dashboard/products",
-            icon: ShoppingBasket        ,
+            icon: ShoppingBasket,
         },
     ],
 }

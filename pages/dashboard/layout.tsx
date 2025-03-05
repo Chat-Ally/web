@@ -12,27 +12,8 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
-import { createClient } from "@/lib/supabase/component"
-import { useEffect, useState } from "react"
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-    const supabase = createClient()
-    const [user, setUser] = useState({ name: "", email: "", avatar: "" })
-
-    useEffect(() => {
-        async function getUser() {
-            const { data: { user } } = await supabase.auth.getUser()
-            let userData = {
-                name: "",
-                email: user?.email || "",
-                avatar: ""
-            }
-            setUser(userData)
-        }
-
-        getUser()
-    }, [])
-
+export default function Layout({ children, user }: { children: React.ReactNode, user: any }) {
     return (
         <SidebarProvider>
             <AppSidebar user={user} />
