@@ -1,14 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import React from "react";
 import Navbar from "@/components/navbar";
-import { LoginForm } from "@/components/login-form";
+import { LoginForm } from "@/components/auth/login-form";
 import { FeaturesGrid } from "@/components/landing/features-grid";
 import DoNotMakeAnApp from "../components/landing/do-not-make-an-app";
 import Channels from "@/components/landing/channels";
-import Hero from "@/components/landing/hero";
 import Footer from "@/components/footer";
 import { DotBackgroundDemo } from "@/components/background";
-import { SpotlightPreview } from "@/components/landing/spotlight";
 import { SpotlightNewDemo } from "@/components/landing/spotlight-new-example";
 import Pricing from "@/components/landing/pricing";
 
@@ -34,7 +32,7 @@ export default function Home() {
             <Channels />
             <DoNotMakeAnApp />
             <Pricing />
-            <LoginForm />
+            <LoginForm authType="register" />
           </div>
           <Footer />
         </div>

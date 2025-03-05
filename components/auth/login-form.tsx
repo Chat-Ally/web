@@ -6,11 +6,17 @@ import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/component"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import PrivacyNotice from "./privacy-notice"
+
+interface LoginFormProps extends React.ComponentProps<"div"> {
+    authType: "login" | "register";
+}
 
 export function LoginForm({
     className,
+    authType,
     ...props
-}: React.ComponentProps<"div">) {
+}: LoginFormProps) {
 
     const router = useRouter()
     const supabase = createClient()
@@ -35,6 +41,27 @@ export function LoginForm({
         router.push('/dashboard')
     }
 
+    let strings = {
+        register: {
+            cta: "Crea una cuenta ahora",
+            subtitle: "Empieza en menos de 1 minuto",
+            action: signUp,
+            buttonText: "Registrarte",
+            alternativeButtonText: "¿Ya tienes una cuenta?",
+            alternativeButtonLink: "Inicia Sesión",
+            alternativeLink: "/auth?auth=login",
+        },
+        login: {
+            cta: "Inicia sesión en tu cuenta",
+            subtitle: "Accede a todas las funcionalidades",
+            action: login,
+            buttonText: "Iniciar sesión",
+            alternativeButtonText: "¿No tienes una cuenta?",
+            alternativeButtonLink: "Crear una",
+            alternativeLink: "/auth?auth=register"
+        },
+    };
+
     return (
         <div className={cn("flex flex-col gap-6 max-w-96 mx-auto", className)} {...props}>
             <Card className="overflow-hidden">
@@ -42,8 +69,8 @@ export function LoginForm({
                     <form className="p-6 md:p-8">
                         <div className="flex flex-col gap-6">
                             <div className="flex flex-col items-center text-center">
-                                <h1 className="text-2xl font-bold">Crea una cuenta ahora</h1>
-                                <p className="text-balance text-muted-foreground">Empieza en menos de 1 minuto</p>
+                                <h1 className="text-2xl font-bold">{strings[authType].cta}</h1>
+                                <p className="text-balance text-muted-foreground">{strings[authType].subtitle}</p>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Correo electrónico</Label>
@@ -78,31 +105,19 @@ export function LoginForm({
                             <Button
                                 variant="default"
                                 className="w-full"
-                                onClick={login}
+                                onClick={strings[authType].action}
                             >
-                                Login
+                                {strings[authType].buttonText}
                             </Button>
-                            {/* <Button
-                                variant="default"
-                                className="w-full"
-                                onClick={signUp}
-                            >
-                                Register
-                            </Button> */}
                             <div className="text-center text-sm">
-                                Don&apos;t have an account?{" "}
-                                <a href="#" className="underline underline-offset-4">
-                                    Sign up
-                                </a>
+                                {strings[authType].alternativeButtonText}{" "}
+                                <a href={strings[authType].alternativeLink} className="underline underline-offset-4">{strings[authType].alternativeButtonLink}</a>
                             </div>
                         </div>
                     </form>
                 </CardContent>
             </Card>
-            <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                and <a href="#">Privacy Policy</a>.
-            </div>
+            <PrivacyNotice />
         </div>
     )
 }

@@ -1,13 +1,29 @@
-import { LoginForm } from "@/components/login-form";
+import { LoginForm } from "@/components/auth/login-form";
 import Navbar from "@/components/navbar";
+import { useRouter } from 'next/router'
+import { useEffect, useState } from "react";
 
 export default function Auth() {
-    return (
-        <>
-            <Navbar />
-            <div className="h-screen flex flex-col justify-center ">
-                <LoginForm />
-            </div>
-        </>
-    )
+    const router = useRouter()
+    const { query } = router
+    const [authType, setAuthType] = useState<"login" | "register">("login")
+
+    useEffect(() => {
+        if (query.auth == "register") setAuthType("register")
+    }, [query, router.isReady])
+
+    if (!authType) {
+        return "Cargando...";
+    }
+
+    if (authType) {
+        return (
+            <>
+                <Navbar />
+                <div className="h-screen flex flex-col justify-center ">
+                    <LoginForm authType={authType} />
+                </div>
+            </>
+        )
+    }
 }
