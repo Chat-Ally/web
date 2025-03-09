@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
+import { getChats } from "enwhats-db";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
@@ -26,20 +27,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-    let chats
-    // We changed tables, which broke this
+    // let chats = await getChats(supabase)
 
-    /* if (currentUser.user?.id) {
-        let { data: business, error: businessError } = await supabase.from('business').select("*").eq("owner_id", currentUser.user.id).single()
-        if (business) console.log(business)
-        if (businessError) console.error("businessError: ", businessError)
-        if (business && business.id) {
-            let { data, error } = await supabase.from("chats").select("*").eq("id", business.id)
-            if (data) console.log("chats: ", data)
-            if (error) console.error(error)
-            chats = data
-        }
-    } */
+    let { data: chats, error: chatError } = await supabase
+        .from("chats")
+        .select(`
+            id,
+            customer_name,
+            phones(number)
+        `)
+
+    if (chatError) console.error(chatError)
+
+    if (chats) console.log(chats)
 
     return {
         props: {
@@ -54,7 +54,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Conversations({ data, user }: { data: any, user: any }) {
-    const [conversations, setConversations] = useState(data.data)
+    console.log(data)
+    const [conversations, setConversations] = useState(data)
     return (
         <Layout user={user}>
             <>
@@ -62,12 +63,12 @@ export default function Conversations({ data, user }: { data: any, user: any }) 
 
                 {
                     conversations && conversations.length > 0 ?
-                        conversations.map((conversation: { id: number, phone: string, name: string }) =>
+                        conversations.map((conversation: { id: string, phones: any, customer_name: string }) =>
                             <Conversation
                                 key={conversation.id}
-                                id={conversation.phone}
-                                name={conversation.phone}
-                                phone={conversation.phone}
+                                id={conversation.id}
+                                name={conversation.customer_name}
+                                phone={conversation.phones.number}
                             />)
                         :
                         <h2>No conversations</h2>

@@ -16,9 +16,12 @@ export default function Conversation({ name, phone, id }: { name: string, phone:
                 <CardHeader className="flex flex-row">
                     <Avatar>
                         <AvatarImage src="" />
-                        <AvatarFallback>{getSimpleNumber().slice(-3)}</AvatarFallback>
+                        <AvatarFallback>AB</AvatarFallback>
                     </Avatar>
-                    <CardTitle className="ml-2 transition-colors hover:text-neutral-600">{getSimpleNumber()}</CardTitle>
+                    <div>
+                        <CardTitle className="ml-2 transition-colors hover:text-neutral-600">{name ?? phone}</CardTitle>
+                        {name ? <h2 className="ml-2">{phone}</h2> : ''}
+                    </div>
                 </CardHeader>
             </Card>
         </Link>
