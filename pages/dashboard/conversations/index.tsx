@@ -13,7 +13,6 @@ import {
 import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
-import { getChats } from "enwhats-db";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)

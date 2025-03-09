@@ -1,39 +1,51 @@
 import { GetServerSidePropsContext } from "next";
-import dify from "../../../../dify-js/index"
 import Layout from "../layout";
 import ReactMarkdown from 'react-markdown'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import Dify from "dify-js"
+import { createClient } from "@/lib/supabase/server-props";
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const supabase = createClient(context)
+    let { data, error } = await supabase.auth.getUser()
+    if (error || !data) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
 
-export async function getServerSideProps(contex: GetServerSidePropsContext) {
-    const DIFY_URL = process.env.NEXT_PUBLIC_DIFY_URL
-    const DIFY_API_KEY = process.env.NEXT_PUBLIC_DIFY_API_KEY
+    const DIFY_URL = process.env.DIFY_URL
+    const DIFY_API_KEY = process.env.DIFY_API_KEY
+    if (!DIFY_URL || !DIFY_API_KEY) throw new Error("DIFY_URL or DIFY_API_KEY missing.")
 
-    let { getConversationHistoryMessages } = dify(DIFY_URL, DIFY_API_KEY)
+    let dify = new Dify(DIFY_URL, DIFY_API_KEY)
 
-    let data = await getConversationHistoryMessages(contex.query.id)
-    console.log(data)
+    let conversationHistoryMessages = await dify.getConversationHistoryMessages(context.query.phone)
+    conversationHistoryMessages = await conversationHistoryMessages.json()
 
     return {
         props: {
-            data: data.data
+            messages: conversationHistoryMessages.data,
+            user: data
         }
     }
 }
 
-export default function Conversation(props: any) {
-
+export default function Conversation({ user, messages }: { user: any, messages: any }) {
     dayjs.extend(utc);
     dayjs.extend(timezone)
 
     return (
-        <Layout>
+        <Layout user={user}>
             <div className="container ">
                 <div className="mx-auto">
-                    {props.data.map((conversation: any) => (
-                        <div className="flex flex-col">
+                    {messages.map((conversation: any) => (
+                        <div key={conversation.id} className="flex flex-col">
                             <div className="w-fit max-w-[75%] bg-neutral-100 dark:bg-white rounded-xl p-2 my-2">
                                 <p className="text-black">{conversation.query}</p>
                             </div>

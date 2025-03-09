@@ -11,7 +11,7 @@ export default function Conversation({ name, phone, id }: { name: string, phone:
     }
 
     return (
-        <Link href={"/dashboard/conversations/" + String(id)}>
+        <Link href={"/dashboard/conversations/" + String(id) + "?phone=" + phone}>
             <Card>
                 <CardHeader className="flex flex-row">
                     <Avatar>

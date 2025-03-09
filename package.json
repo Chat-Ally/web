@@ -26,6 +26,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
+    "dify-js": "github:Chat-Ally/lib-dify",
     "enwhats-db": "github:Chat-Ally/enwhats-db",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.469.0",
