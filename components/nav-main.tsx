@@ -18,6 +18,7 @@ export function NavMain({
         title: string
         url: string
         icon?: LucideIcon
+        id: number
         isActive?: boolean
         items?: {
             title: string
@@ -34,7 +35,7 @@ export function NavMain({
             }
             <SidebarMenu>
                 {items.map((item) => (
-                    <Link href={item.url}>
+                    <Link key={item.id} href={item.url}>
                         <SidebarMenuItem>
                             <SidebarMenuButton tooltip={item.title}>
                                 {item.icon && <item.icon />}

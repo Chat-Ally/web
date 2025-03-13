@@ -1,12 +1,10 @@
-import {
-    NavigationMenuLink,
-} from "@/components/ui/navigation-menu"
+import { NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import React from "react"
 import { Button } from "./ui/button"
 
-const ListItem = React.forwardRef<
+/* const ListItem = React.forwardRef<
     React.ElementRef<"a">,
     React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
@@ -29,7 +27,7 @@ const ListItem = React.forwardRef<
             </NavigationMenuLink>
         </li>
     )
-})
+}) */
 
 export default function Navbar() {
     return (

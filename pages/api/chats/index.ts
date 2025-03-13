@@ -6,9 +6,9 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    let supabase = createClient(req, res)
+    const supabase = createClient(req, res)
 
-    let chats = await getChats(supabase)
+    const chats = await getChats(supabase)
 
     // let chats = await supabase.from("chats").select("*").limit(10);
 

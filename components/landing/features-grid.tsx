@@ -4,7 +4,7 @@ import { HeroTitle } from "../background";
 
 export function FeaturesGrid() {
   return (
-    <div className="lg:max-w-screen-xl">
+    <div className="lg:max-w-screen-xl" >
       <HeroTitle alignment="text-center">Un Ecommerce <br /> en tu WhatsApp</HeroTitle>
       <BentoGrid className="mx-auto md:auto-rows-[20rem] mt-4">
         {items.map((item, i) => (

@@ -1,7 +1,7 @@
 import { BigChart } from "@/components/big-chart"
 import { TypographyH1 } from "@/components/h1"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import Layout from "./layout"
+import Layout from "../../components/layout"
 import { createClient } from "@/lib/supabase/server-props"
 import { GetServerSidePropsContext } from "next"
 

@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import Layout from "../layout";
+import Layout from "../../../components/layout";
 import ReactMarkdown from 'react-markdown'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
@@ -7,7 +7,11 @@ import utc from 'dayjs/plugin/utc'
 import Dify from "dify-js"
 import { createClient } from "@/lib/supabase/server-props";
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export default function Conversations() {
+    return (<>Conversations</>)
+}
+
+/* export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
     let { data, error } = await supabase.auth.getUser()
     if (error || !data) {
@@ -25,7 +29,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     let dify = new Dify(DIFY_URL, DIFY_API_KEY)
 
-    let conversationHistoryMessages = await dify.getConversationHistoryMessages(context.query.phone)
+    let conversationHistoryMessages = await dify.getConversationHistoryMessages(String(context.query.phone))
     conversationHistoryMessages = await conversationHistoryMessages.json()
 
     return {
@@ -51,7 +55,6 @@ export default function Conversation({ user, messages }: { user: any, messages: 
                             </div>
 
                             <div className="w-[90%] md:w-[75%] bg-neutral-800 text-white rounded-xl p-2 ml-auto my-2">
-                                {/* <p>{conversation.answer}</p> */}
                                 <ReactMarkdown>{conversation.answer}</ReactMarkdown>
                                 <p className="text-xs text-neutral-400">{dayjs.unix(conversation.created_at).tz("America/Mexico_City").format("h:mm a")}</p>
                             </div>
@@ -61,4 +64,4 @@ export default function Conversation({ user, messages }: { user: any, messages: 
             </div>
         </Layout>
     )
-}
+} */

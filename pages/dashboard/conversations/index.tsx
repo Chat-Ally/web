@@ -1,5 +1,5 @@
 import { TypographyH1 } from "@/components/h1";
-import Layout from "../layout";
+import Layout from "../../../components/layout";
 import Conversation from "@/components/conversations/conversation";
 import {
     Pagination,

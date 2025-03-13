@@ -26,21 +26,25 @@ const data = {
             title: "Home",
             url: "/dashboard",
             icon: House,
+            id: 0
         },
         {
             title: "Conversaciones",
             url: "/dashboard/conversations",
             icon: MessageSquareText,
+            id: 1
         },
         {
             title: "Ordenes",
             url: "/dashboard/orders",
             icon: Store,
+            id: 2
         },
         {
             title: "Productos",
             url: "/dashboard/products",
             icon: ShoppingBasket,
+            id: 3
         },
     ],
 }

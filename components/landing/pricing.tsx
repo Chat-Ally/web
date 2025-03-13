@@ -73,7 +73,7 @@ const PricingCard = ({
     buttonText,
     active,
     premium
-}) => {
+}: { children?: any, description?: any, price?: any, type?: any, subscription?: any, buttonText?: any, active?: any, premium?: any }) => {
     return (
         <div className="">
             <div className="w-full relative h-full transition-transform group">
@@ -120,7 +120,7 @@ const PricingCard = ({
     );
 };
 
-const List = ({ children }) => {
+const List = ({ children }: { children: any }) => {
     return (
         <p className="text-base text-body-color dark:text-dark-6">{children}</p>
     );

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Meteors } from "../ui/meteors";
-import { IconNode } from "lucide-react";
+import { IconNode, LucideProps } from "lucide-react";
 import { HighLight } from "./do-not-make-an-app";
 
 interface props {
-    icon: IconNode,
-    channel: string
+    icon?: LucideProps | IconNode,
+    channel?: string
 }
 
 export function MeteorsCard(props: props) {
@@ -15,7 +15,7 @@ export function MeteorsCard(props: props) {
             <div className="relative shadow-xl bg-white dark:bg-gray-900 border border-gray-800  px-4 py-8 h-full w-full overflow-hidden rounded-2xl flex flex-col justify-center items-center">
 
                 <div className="flex flex-col justify-center items-center text-base text-center text-slate-500 relative z-50">
-                    {props.icon}
+                    {props.icon as ReactNode}
                     <p className="text-2xl">{props.channel}</p>
                 </div>
 

@@ -11,10 +11,10 @@ export default async function handler(
     if (req.method === 'POST') {
         const supabase = createClient(req, res)
 
-        let businessId = await getBusinessIdByPhoneNumber(supabase, String(queryParams.businessPhone))
-        let customerPhoneId = await getPhoneIdByNumber(supabase, String(queryParams.customerPhone))
-        let chatId = await getChatId(supabase, businessId, customerPhoneId)
-        let order = await createOrder(supabase, chatId, 100, 80, JSON.parse(String(queryParams.product_list)))
+        const businessId = await getBusinessIdByPhoneNumber(supabase, String(queryParams.businessPhone))
+        const customerPhoneId = await getPhoneIdByNumber(supabase, String(queryParams.customerPhone))
+        const chatId = await getChatId(supabase, businessId, customerPhoneId)
+        const order = await createOrder(supabase, chatId, 100, 80, JSON.parse(String(queryParams.product_list)))
 
         if (order) {
             res.json({

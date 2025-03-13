@@ -1,4 +1,4 @@
-import Layout from "../layout"
+import Layout from "../../../components/layout"
 import { DataTable } from "@/components/data-table"
 import { ColumnDef } from "@tanstack/react-table"
 import { CreateProductDialog } from "@/components/products/dialog"

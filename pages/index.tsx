@@ -28,7 +28,7 @@ export default function Home() {
       <DotBackgroundDemo>
         <div >
           <div className={`${geistSans.variable} ${geistMono.variable} font-[family-name:var(--font-geist-sans)] grid grid-cols-1 md:gap-y-32 px-4 md:px-auto container mx-auto lg:max-w-screen-xl py-24 `}>
-            <FeaturesGrid id="features-grid" />
+            <FeaturesGrid />
             <Channels />
             <DoNotMakeAnApp />
             <Pricing />

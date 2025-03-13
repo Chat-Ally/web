@@ -4,7 +4,7 @@ export default function Footer() {
     return (
         <div >
             <footer className="z-10 px-8">
-                <HeroTitle>enwhats</HeroTitle>
+                <HeroTitle alignment="text-left">enwhats</HeroTitle>
                 <div className="flex justify-between md:w-96 md:mx-auto">
                     <div>
                         <p className="font-bold text-lg">Empresa</p>

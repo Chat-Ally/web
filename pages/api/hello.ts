@@ -11,8 +11,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  let supabase = createClient(req, res)
-  let { data, error } = await supabase.auth.getUser()
+  const supabase = createClient(req, res)
+  const { data, error } = await supabase.auth.getUser()
 
   if (data) {
     res.status(200).json({

@@ -1,25 +1,45 @@
 import { createClient } from "@/lib/supabase/server-props";
-import Layout from "../layout";
+import Layout from "../../../components/layout";
 import { GetServerSidePropsContext } from "next";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
+    const { data: user, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
 
     const { id } = context.query
-    const { data, error } = await supabase.from("products").select("*").eq("business_id", 1).eq("id", id)
-    if(error) console.error(error)
-    
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("business_id", 1)
+        .eq("id", id)
+        .single()
+
+    if (error) console.error(error)
+
     return {
         props: {
-            data: data
-        } 
+            data: data,
+            user: {
+                email: user.user.email,
+                name: 'name',
+                avatar: 'avatar'
+            }
+        }
     }
 }
 
-export default function Product(data: any){
+export default function Product({ data, user }: { data: any, user: any }) {
     console.log(data)
-    return(
-        <Layout>
+    return (
+        <Layout user={user}>
             <p>Product </p>
         </Layout>
     )
