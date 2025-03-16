@@ -40,7 +40,7 @@ export default function Navbar() {
                     <Link href="/auth" className="mr-2">
                         <Button variant="secondary">Entrar</Button>
                     </Link>
-                    <Link href="/auth">
+                    <Link href="/auth?auth=register">
                         <Button>Registrarme</Button>
                     </Link>
                 </div>
