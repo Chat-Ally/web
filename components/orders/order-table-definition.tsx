@@ -17,9 +17,9 @@ import {
 
 export type Payment = {
     id: string
-    amount: number
+    total: number
     status: "pending" | "processing" | "success" | "failed"
-    email: string
+    phone: string
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -53,31 +53,31 @@ export const columns: ColumnDef<Payment>[] = [
         ),
     },
     {
-        accessorKey: "email",
+        accessorKey: "phone",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Email
+                    Phone
                     <ArrowUpDown />
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        cell: ({ row }: { row: any }) => <div className="lowercase">{row.original.phone.customer_phone_id.number}</div>,
     },
     {
-        accessorKey: "amount",
-        header: () => <div className="text-right">Amount</div>,
+        accessorKey: "total",
+        header: () => <div className="text-right">Total</div>,
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("amount"))
+            const total = parseFloat(row.getValue("total"))
 
             // Format the amount as a dollar amount
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
-            }).format(amount)
+            }).format(total)
 
             return <div className="text-right font-medium">{formatted}</div>
         },

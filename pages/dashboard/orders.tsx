@@ -32,7 +32,7 @@ import { GetServerSidePropsContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 import { Payment, columns } from "@/components/orders/order-table-definition";
 
-const data: Payment[] = [
+/* const data: Payment[] = [
     {
         id: "m5gr84i9",
         amount: 316,
@@ -63,7 +63,7 @@ const data: Payment[] = [
         status: "failed",
         email: "carmella@hotmail.com",
     },
-]
+] */
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
@@ -77,18 +77,42 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
+    const { data: businessData, error: businessError } = await supabase
+        .from("business")
+        .select("id")
+        .eq("owner_id", data.user.id)
+        .single()
+
+    if (businessError) console.error("businessError", businessError)
+    if (businessData) console.log("businessData", businessData)
+
+    const { data: dataOrder, error: errorOrder } = await supabase
+        .from("orders")
+        .select(`
+            status,
+            total,
+            phone:chat_id(customer_phone_id(number))
+        `)
+        .eq("business_id", businessData?.id)
+    // .limit(10)
+
+    if (error) console.error("errorOrder", errorOrder)
+    if (dataOrder) console.log("dataOrder", dataOrder)
+
     return {
         props: {
             user: {
                 email: data.user.email,
                 name: 'test name',
                 avatar: 'test avatar'
-            }
+            },
+            data: dataOrder
         }
     }
 }
 
-export default function Orders({ user }: { user: any }) {
+export default function Orders({ user, data }: { user: any, data: any }) {
+    console.log(data)
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -115,16 +139,16 @@ export default function Orders({ user }: { user: any }) {
             rowSelection,
         },
     })
-
+    // return (<>hola</>)
     return (
         <Layout user={user}>
             <div className="w-full">
                 <div className="flex items-center py-4">
                     <Input
                         placeholder="Filter emails..."
-                        value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                        value={(table.getColumn("phone")?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
-                            table.getColumn("email")?.setFilterValue(event.target.value)
+                            table.getColumn("phone")?.setFilterValue(event.target.value)
                         }
                         className="max-w-sm"
                     />
