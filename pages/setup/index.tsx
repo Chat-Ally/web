@@ -13,6 +13,14 @@ export default function Setup() {
     const [name, setName] = useState<string>("")
     const [businessName, setBusinessName] = useState<string>("")
     const [logo, setLogo] = useState()
+    const [containerCreated, setContainerCreated] = useState(false)
+
+    async function createWAPPContainer() {
+        let req = await fetch('/api/container')
+        let res = await req.json()
+
+        setContainerCreated(res.ok)
+    }
 
     async function saveBusinessData() {
         const { data: user, error: userError } = await supabase.auth.getUser()
@@ -71,12 +79,23 @@ export default function Setup() {
                     />
                 </div>
 
-                <Button
-                    onClick={saveBusinessData}
-                    className="mt-2"
-                >
-                    Guardar y continuar
-                </Button>
+
+                {
+                    containerCreated ?
+
+                        <Button
+                            onClick={saveBusinessData}
+                            className="mt-2"
+                        >
+                            Guardar y continuar
+                        </Button>
+                        :
+                        <Button
+                            onClick={createWAPPContainer}
+                        >
+                            Crear container
+                        </Button>
+                }
             </div>
         </div>
     )
