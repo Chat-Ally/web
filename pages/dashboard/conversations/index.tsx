@@ -26,7 +26,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-    // let chats = await getChats(supabase)
+
+    const { data: businessData, error: businessError } = await supabase
+        .from("business")
+        .select("id")
+        .eq("owner_id", data.user?.id)
+        .single()
+
+    if (businessError) console.error("businessError", businessError)
+    if (businessData) console.log("businessData", businessData)
+
 
     let { data: chats, error: chatError } = await supabase
         .from("chats")
@@ -35,9 +44,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             customer_name,
             phones(number)
         `)
+        .eq("business_id", businessData?.id)
 
     if (chatError) console.error(chatError)
-
     if (chats) console.log(chats)
 
     return {
@@ -72,23 +81,28 @@ export default function Conversations({ data, user }: { data: any, user: any }) 
                         :
                         <h2>No conversations</h2>
                 }
-                <p>10 de 530</p>
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious href="#" />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">1</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext href="#" />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+
+                {
+                    conversations.length > 10 ?
+                        <Pagination>
+                            <PaginationContent>
+
+                                <PaginationItem>
+                                    <PaginationPrevious href="#" />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">1</PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationNext href="#" />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                        : <></>
+                }
             </>
         </Layout>
     )

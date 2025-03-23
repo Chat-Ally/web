@@ -45,7 +45,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-    let { data: productData, error: productError } = await supabase.from("products").select("*").eq("business_id", 1)
+    const { data: businessData, error: businessError } = await supabase
+        .from("business")
+        .select("id")
+        .eq("owner_id", data.user.id)
+        .single()
+
+    if (businessError) console.error("businessError", businessError)
+    if (businessData) console.log("businessData", businessData)
+
+    let { data: productData, error: productError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("business_id", businessData?.id)
+
     if (productError) console.error('dashboard/products/index' + productError)
 
     return {
@@ -61,11 +74,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Products({ data, user }: { data: any, user: any }) {
+    console.log(data)
     const [products, setProducts] = useState(data)
 
     function updateProductList(newProduct: any) {
         setProducts([...products, newProduct])
     }
+
     return (
         <Layout user={user}>
             <div className="flex justify-between">
