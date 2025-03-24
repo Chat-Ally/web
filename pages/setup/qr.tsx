@@ -1,77 +1,28 @@
-'use client';
+import QR from "@/components/setup/qr";
+import { createClient } from "@/lib/supabase/server-props";
+import { GetServerSidePropsContext } from "next";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { createClient } from '@/lib/supabase/component';
-import Link from 'next/link';
-import { QRCodeCanvas } from 'qrcode.react';
-import { useEffect, useState } from 'react';
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const supabase = await createClient(context)
 
-export default function QR() {
-    const supabase = createClient()
-    const [qrCode, setQRCode] = useState()
-
-    useEffect(() => {
-        async function getQR() {
-            let { data, error } = await supabase
-                .from('whatsapp-containers')
-                .select('*')
-                .eq('id', 1) // you already know we have to change this
-                .single()
-            if (error) console.error(error)
-            if (data) {
-                setQRCode(data.qr)
+    let { data, error } = await supabase.auth.getUser()
+    if (error || !data) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
             }
         }
-        getQR()
-    }, [])
+    }
 
-    useEffect(() => {
-
-        const channel = supabase.channel('qr')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'whatsapp-containers'// add filters later
-                },
-                (payload: any) => {
-                    setQRCode(payload.new.qr)
-                }
-            )
-            .subscribe()
-
-        return () => {
-            supabase.removeChannel(channel)
+    return {
+        props: {
+            user: data.user
         }
-    }, [supabase])
+    }
 
-    return (
-        <div className="h-screen flex flex-col justify-center ">
-            <Card className='mx-auto max-w-md dark:bg-neutral-900'>
-                <CardHeader>
-                    <CardTitle >Empecemos</CardTitle>
-                    <CardDescription>En tu teléfono, abre Whatsapp, dirigete a "Vincular dispositivo" y escanea este código para poder automatizar tu cuenta.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {
-                        qrCode ?
-                            <QRCodeCanvas
-                                className='mx-auto mt-4'
-                                size={256}
-                                value={qrCode}
-                            />
-                            :
-                            <>loading</>
-                    }
-                </CardContent>
-                <CardFooter>
-                    <Link href="/dashboard">
-                        <Button className='mt-4'>Finalizar</Button>
-                    </Link>
-                </CardFooter>
-            </Card>
-        </div>
-    )
+}
+
+export default function QRPage({ user }: { user: any }) {
+    return <QR user={user} />
 }
