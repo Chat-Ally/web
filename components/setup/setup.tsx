@@ -5,19 +5,23 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/component";
 import { useRouter } from "next/router";
 
-export default function Setup() {
+export default function Setup(
+    { businessData, containerExists }:
+        { businessData: any, containerExists: any }
+) {
+    console.log("businessData", businessData)
+    console.log("containerExists", containerExists)
     const router = useRouter()
     const supabase = createClient()
 
     const [name, setName] = useState<string>("")
-    const [businessName, setBusinessName] = useState<string>("")
+    const [businessName, setBusinessName] = useState<string>(businessData.name)
     const [logo, setLogo] = useState()
-    const [containerCreated, setContainerCreated] = useState(false)
+    const [containerCreated, setContainerCreated] = useState(containerExists.id ? true : false)
 
     async function createWAPPContainer() {
         let req = await fetch('/api/container')
         let res = await req.json()
-
         setContainerCreated(res.ok)
     }
 
@@ -42,10 +46,12 @@ export default function Setup() {
     return (
         <div className="w-full h-screen flex justify-center items-center align-middle">
             <div className="bg-slate-50 dark:bg-neutral-900 rounded-md border border-neutral-700 p-8 md:p-16 mx-4">
-                <h1 className="font-bold text-2xl">Empecemos</h1>
+                <h1 className="font-bold text-2xl">Empecemos {businessData.name} </h1>
                 <h2>Vamos a configurar algunos detalles de tu negocio</h2>
 
-                <div className="mt-2">
+                {/* not feeling like this is usefull */}
+
+                {/* <div className="mt-2">
                     <Label htmlFor="name">Nombre</Label>
                     <Input
                         id="name"
@@ -54,7 +60,7 @@ export default function Setup() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
-                </div>
+                </div> */}
 
                 <div className="mt-2">
                     <Label htmlFor="business_name">Nombre de tu negocio</Label>

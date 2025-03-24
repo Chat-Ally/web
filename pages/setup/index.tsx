@@ -2,7 +2,6 @@ import { GetServerSidePropsContext } from "next";
 import { createClient } from "@/lib/supabase/server-props"
 import Setup from "@/components/setup/setup";
 
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
     const { data, error } = await supabase.auth.getUser()
@@ -45,10 +44,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (noContainer) console.error(noContainer)
 
     return {
-        props: {}
+        props: {
+            businessData: businessData,
+            containerCreated: containerExists
+        }
     }
 }
 
-export default function SetupPage() {
-    return <Setup />
+export default function SetupPage({
+    businessData,
+    containerCreated
+}: {
+    businessData: any,
+    containerCreated: any
+}) {
+    return <Setup businessData={businessData} containerExists={containerCreated} />
 }
