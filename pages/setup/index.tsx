@@ -34,19 +34,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (businessError) console.error(businessError)
 
     // Container is also created here, if already exists, go to next step
-    const { data: containerExists, error: noContainer } = await supabase
-        .from("whatsapp-containers")
-        .select("*")
-        .eq("id", businessData.id)
-        .single()
+    let containerExists
+    if (businessData && businessData.id) {
+        const { data: containerExists, error: noContainer } = await supabase
+            .from("whatsapp-containers")
+            .select("*")
+            .eq("id", businessData.id)
+            .single()
 
-    if (containerExists) console.log(containerExists)
-    if (noContainer) console.error(noContainer)
+        if (containerExists) console.log(containerExists)
+        if (noContainer) console.error(noContainer)
+    }
 
     return {
         props: {
             businessData: businessData,
-            containerCreated: containerExists
+            containerCreated: containerExists ? containerExists : null
         }
     }
 }

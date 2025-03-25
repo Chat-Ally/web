@@ -15,9 +15,9 @@ export default function Setup(
     const supabase = createClient()
 
     const [name, setName] = useState<string>("")
-    const [businessName, setBusinessName] = useState<string>(businessData.name)
+    const [businessName, setBusinessName] = useState<string>(businessData?.name ?? '')
     const [logo, setLogo] = useState()
-    const [containerCreated, setContainerCreated] = useState(containerExists.id ? true : false)
+    const [containerCreated, setContainerCreated] = useState(containerExists?.id ? true : false)
 
     async function createWAPPContainer() {
         let req = await fetch('/api/container')
@@ -46,7 +46,7 @@ export default function Setup(
     return (
         <div className="w-full h-screen flex justify-center items-center align-middle">
             <div className="bg-slate-50 dark:bg-neutral-900 rounded-md border border-neutral-700 p-8 md:p-16 mx-4">
-                <h1 className="font-bold text-2xl">Empecemos {businessData.name} </h1>
+                <h1 className="font-bold text-2xl">Empecemos {businessData?.name} </h1>
                 <h2>Vamos a configurar algunos detalles de tu negocio</h2>
 
                 {/* not feeling like this is usefull */}
