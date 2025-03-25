@@ -9,20 +9,29 @@ export default async function handler(
 ) {
     const supabase = createClient(req, res)
     const { data, error } = await supabase.auth.getUser()
-
     if (error || !data.user) {
         return res.status(200).json({
             name: "not logged in",
             data: error
         });
     }
+    // Step 0: Check if user already has a container
+    const { data: containerData, error: containerError } = await supabase
+        .from("whatsapp-containers")
+        .select("coolify_application_uuid")
+        .single()
 
-    if (data.user && data.user.id) {
+    if (containerError) console.error("containerError", containerError)
+    if (!data || containerError) console.log("No container")
+
+    let shouldBuildContainer = !data || containerError
+
+    // Step 1: Create container with dockerfile
+    if (shouldBuildContainer && data.user && data.user.id) {
         let dockerfileRequest = await fetch('https://raw.githubusercontent.com/Chat-Ally/whatsapp-container/refs/heads/main/Dockerfile')
         let dockerfile = await dockerfileRequest.text()
         let encodedDockerfile = encodeToBase64(dockerfile)
 
-        // Step 1: Create container with dockerfile
         let containerData = JSON.stringify({
             project_uuid: process.env.COOLIFY_PROJECT_ID,
             server_uuid: process.env.COOLIFY_SERVER_ID,
@@ -56,7 +65,13 @@ export default async function handler(
             })
         }
 
-        console.log(businessData)
+        const { data: whatsappSupabaseContainer, error: whatsappSupabaseContainererror } = await supabase
+            .from("whatsapp-containers")
+            .insert([{
+                business_id: businessData.id,
+                coolify_application_uuid: containerId
+            }])
+            .select()
 
         // Step 2: Set Env Variables to the previously created container
         const envRequest = await fetch(process.env.COOLIFY_SERVER + `/api/v1/applications/${containerId}/envs/bulk`, {
@@ -91,11 +106,6 @@ export default async function handler(
             })
         })
 
-        console.log(envRequest)
-
-        let envResponse = await envRequest.json()
-        console.log(envResponse)
-
         // Step 3: Start container 
         const startContainerReq = await fetch(process.env.COOLIFY_SERVER + `/api/v1/applications/${containerId}/start`, {
             method: 'GET',
@@ -104,11 +114,6 @@ export default async function handler(
                 'Content-Type': 'application/json'
             }
         })
-
-        console.log(startContainerReq)
-
-        let startContainrRes = await startContainerReq.json()
-        console.log(startContainrRes)
 
         return res.send({
             ok: true

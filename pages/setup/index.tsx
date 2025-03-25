@@ -14,10 +14,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-    function checkWhatsappContainerRunning() { }
-    function checkWhatsappContainerExists() { }
-    function checkUserHasBusiness() { }
-
     // There is 4 states:
     // 1. New account: No business, no container, wapp not running
     // 2. Incomplete setup: Business, no container, wapp not running
@@ -31,17 +27,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         .eq('owner_id', data.user.id)
         .single()
 
-    if (businessError) console.error(businessError)
+    if (businessError) console.error("businessError", businessError)
 
     // Container is also created here, if already exists, go to next step
     const { data: containerExists, error: noContainer } = await supabase
         .from("whatsapp-containers")
         .select("*")
-        .eq("id", businessData.id)
+        .eq("business_id", businessData.id)
         .single()
 
-    if (containerExists) console.log(containerExists)
-    if (noContainer) console.error(noContainer)
+    if (containerExists) console.log("containerExists", containerExists)
+    if (noContainer) console.error("noContainer", noContainer)
 
     return {
         props: {
