@@ -69,7 +69,8 @@ export default async function handler(
             .from("whatsapp-containers")
             .insert([{
                 business_id: businessData.id,
-                coolify_application_uuid: containerId
+                coolify_application_uuid: containerId,
+                status: "unauthenticated"
             }])
             .select()
 
