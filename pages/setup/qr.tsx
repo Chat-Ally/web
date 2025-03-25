@@ -15,14 +15,31 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
+    const { data: businessData, error: businessError } = await supabase
+        .from("business")
+        .select("*")
+        .eq('owner_id', data.user?.id)
+        .single()
+
+    if (businessError) console.error("businessError", businessError)
+
     return {
         props: {
-            user: data.user
+            user: data.user,
+            businessData: businessData
         }
     }
 
 }
 
-export default function QRPage({ user }: { user: any }) {
-    return <QR user={user} />
+export default function QRPage(
+    {
+        user,
+        businessData
+    }: {
+        user: any,
+        businessData: any
+    }
+) {
+    return <QR user={user} businessData={businessData} />
 }

@@ -7,16 +7,17 @@ import Link from 'next/link';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useEffect, useState } from 'react';
 
-export default function QR(user: any) {
+export default function QR({ user, businessData }: { user: any, businessData: any }) {
     const supabase = createClient()
     const [qrCode, setQRCode] = useState()
+    const [WAPPStatus, setWAPPStatus] = useState(false)
 
     useEffect(() => {
         async function getQR() {
             let { data, error } = await supabase
                 .from('whatsapp-containers')
                 .select('*')
-                .eq('id', user.id) // you already know we have to change this
+                .eq('business_id', businessData.id)
                 .single()
             if (error) console.error(error)
             if (data) {
@@ -33,9 +34,13 @@ export default function QR(user: any) {
                 {
                     event: '*',
                     schema: 'public',
-                    table: 'whatsapp-containers'// add filters later
+                    table: 'whatsapp-containers',
+                    filter: `business_id=eq.${businessData.id}`
                 },
                 (payload: any) => {
+                    console.log(WAPPStatus)
+                    setWAPPStatus(payload.new.status === "authenticated")
+                    console.log(WAPPStatus)
                     setQRCode(payload.new.qr)
                 }
             )
@@ -51,24 +56,37 @@ export default function QR(user: any) {
             <Card className='mx-auto max-w-md dark:bg-neutral-900'>
                 <CardHeader>
                     <CardTitle >Empecemos</CardTitle>
-                    <CardDescription>En tu teléfono, abre Whatsapp, dirigete a "Vincular dispositivo" y escanea este código para poder automatizar tu cuenta.</CardDescription>
+                    {
+                        WAPPStatus ?
+                            <CardDescription>Se configuró tu whatsapp. En unos minutos empezaremos a responder tus mensajes.</CardDescription>
+                            :
+                            <CardDescription>En tu teléfono, abre Whatsapp, dirigete a "Vincular dispositivo" y escanea este código para poder automatizar tu cuenta.</CardDescription>
+                    }
                 </CardHeader>
                 <CardContent>
+
                     {
-                        qrCode ?
-                            <QRCodeCanvas
-                                className='mx-auto mt-4'
-                                size={256}
-                                value={qrCode}
-                            />
+                        WAPPStatus ?
+                            <></>
                             :
-                            <>loading</>
+                            qrCode ?
+                                <QRCodeCanvas
+                                    className='mx-auto mt-4'
+                                    size={256}
+                                    value={qrCode}
+                                />
+                                :
+                                <>loading</>
                     }
                 </CardContent>
                 <CardFooter>
-                    <Link href="/dashboard">
-                        <Button className='mt-4'>Finalizar</Button>
-                    </Link>
+                    {
+                        WAPPStatus ?
+                            <Link href="/dashboard">
+                                <Button className='mt-4'>Finalizar</Button>
+                            </Link>
+                            : <></>
+                    }
                 </CardFooter>
             </Card>
         </div>
