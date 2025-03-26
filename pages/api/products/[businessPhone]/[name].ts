@@ -7,11 +7,14 @@ export default async function handler(
     res: NextApiResponse
 ) {
     const supabase = createClient(req, res)
-
     const queryParams = req.query
-    console.log(queryParams)
 
-    const product = await getProduct(supabase, String(queryParams.businessPhone), String(queryParams.productName))
+    const product = await getProduct(
+        supabase,
+        String(queryParams.businessPhone),
+        String(queryParams.name)
+    )
+
     res.json({
         "product": product
     })
