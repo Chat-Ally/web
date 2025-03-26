@@ -35,11 +35,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 export default function QRPage(
     {
         user,
-        businessData
+        businessData,
     }: {
         user: any,
-        businessData: any
+        businessData: any,
     }
 ) {
-    return <QR user={user} businessData={businessData} />
+    return <QR
+        user={user}
+        businessData={businessData}
+    />
 }

@@ -7,24 +7,27 @@ import Link from 'next/link';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useEffect, useState } from 'react';
 
-export default function QR({ user, businessData }: { user: any, businessData: any }) {
+export default function QR({
+    user,
+    businessData
+}: {
+    user: any,
+    businessData: any
+}) {
+
     const supabase = createClient()
     const [qrCode, setQRCode] = useState()
     const [WAPPStatus, setWAPPStatus] = useState(false)
 
     useEffect(() => {
-        async function getQR() {
-            let { data, error } = await supabase
-                .from('whatsapp-containers')
-                .select('*')
-                .eq('business_id', businessData.id)
-                .single()
-            if (error) console.error(error)
-            if (data) {
-                setQRCode(data.qr)
-            }
+        async function createWAPPContainer() {
+            let req = await fetch('/api/container')
+            console.log(req)
+            let res = await req.json()
+            console.log(res)
+            // setContainerCreated(res.ok)
         }
-        getQR()
+        createWAPPContainer()
     }, [])
 
     useEffect(() => {

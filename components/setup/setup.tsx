@@ -8,30 +8,22 @@ import { useRouter } from "next/router";
 export default function Setup(
     {
         businessData,
-        containerExists
     }: {
         businessData: any,
-        containerExists: any
     }
 ) {
-    console.log("businessData", businessData)
-    console.log("containerExists", containerExists)
     const router = useRouter()
     const supabase = createClient()
 
     const [name, setName] = useState<string>("")
     const [businessName, setBusinessName] = useState<string>(businessData?.name ?? '')
     const [logo, setLogo] = useState()
-    const [containerCreated, setContainerCreated] = useState(containerExists?.id ? true : false)
-
-    console.log("containerExists", containerExists)
 
     async function createWAPPContainer() {
         let req = await fetch('/api/container')
         console.log(req)
         let res = await req.json()
         console.log(res)
-        setContainerCreated(res.ok)
     }
 
     async function createBusiness() {
@@ -55,17 +47,11 @@ export default function Setup(
             .eq("id", businessData?.id)
             .select()
 
-        containerExists ? console.log("si existe xd ") : console.log("no existe")
-        if (containerExists) {
-            router.push('/setup/qr')
-        } else {
-            createWAPPContainer()
-        }
+        router.push('/setup/qr')
     }
 
     async function handleCreateBusiness() {
         await createBusiness()
-        await createWAPPContainer()
         router.push('/setup/qr')
     }
 
@@ -74,18 +60,6 @@ export default function Setup(
             <div className="bg-slate-50 dark:bg-neutral-900 rounded-md border border-neutral-700 p-8 md:p-16 mx-4">
                 <h1 className="font-bold text-2xl">Empecemos {businessData?.name} </h1>
                 <h2>Vamos a configurar algunos detalles de tu negocio</h2>
-                {/* not feeling like this is usefull */}
-                {/* <div className="mt-2">
-                    <Label htmlFor="name">Nombre</Label>
-                    <Input
-                        id="name"
-                        type="text"
-                        placeholder="Escribe tu nombre"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div> */}
-
                 <div className="mt-2">
                     <Label htmlFor="business_name">Nombre de tu negocio</Label>
                     <Input
@@ -107,13 +81,6 @@ export default function Setup(
                         value={logo}
                     />
                 </div>
-
-                {/* <Button
-                    onClick={createWAPPContainer}
-                >
-                    Check if container exists
-                </Button> */}
-
                 {
                     businessData ?
                         <Button
