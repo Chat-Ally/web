@@ -22,9 +22,10 @@ export default async function handler(
         .single()
 
     if (containerError) console.error("containerError", containerError)
-    if (!data || containerError) console.log("No container")
+    if (!containerData || containerError) console.log("No container")
 
-    let shouldBuildContainer = !data || containerError
+    /* this is cursed, needs more testing */
+    let shouldBuildContainer = !containerData || containerError
 
     // Step 1: Create container with dockerfile
     if (shouldBuildContainer && data.user && data.user.id) {
@@ -58,14 +59,14 @@ export default async function handler(
             .eq('owner_id', data.user.id)
             .single()
 
-        if (businessError) console.error(businessError)
+        if (businessError) console.error('businessError', businessError)
         if (businessError || !businessData) {
             return res.status(400).send({
                 error: businessError
             })
         }
 
-        const { data: whatsappSupabaseContainer, error: whatsappSupabaseContainererror } = await supabase
+        const { data: whatsappSupabaseContainer, error: whatsappSupabaseContainerError } = await supabase
             .from("whatsapp-containers")
             .insert([{
                 business_id: businessData.id,
@@ -73,6 +74,7 @@ export default async function handler(
                 status: "unauthenticated"
             }])
             .select()
+        if (whatsappSupabaseContainerError) console.error("whatsappSupabaseContainerError", whatsappSupabaseContainerError)
 
         // Step 2: Set Env Variables to the previously created container
         const envRequest = await fetch(process.env.COOLIFY_SERVER + `/api/v1/applications/${containerId}/envs/bulk`, {
