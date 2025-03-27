@@ -13,25 +13,38 @@ import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/component"
 import { useState } from "react"
 
-export function CreateProductDialog({ onProductCreated }: { onProductCreated: (newProduct: any) => void }) {
-    const supabase = createClient()
-    
-    const [open, setOpen] = useState(false)
+export function CreateProductDialog({
+  onProductCreated,
+  businessId
+}: {
+  onProductCreated: (newProduct: any) => void,
+  businessId: number
+}) {
+  const supabase = createClient()
 
-    const [productName, setProductName] = useState('')
-    const [productDescription, setProductDescription] = useState('')
-    const [productPrice, setProductPrice] = useState('')
-  
-    async function uploadProduct(){
-        const { data, error } = await supabase.from('products').insert([{ name: productName, image_url: productDescription, price: productPrice, business_id: 1 },]).select() // TODO: Use actual business id
-        if(data) {
-          console.log('new product', data[0])
-          onProductCreated(data[0])
-          setOpen(false)
-        }
-        if(error) console.error(error)
+  const [open, setOpen] = useState(false)
+  const [productName, setProductName] = useState('')
+  const [productDescription, setProductDescription] = useState('')
+  const [productPrice, setProductPrice] = useState('')
+
+  async function uploadProduct() {
+    const { data, error } = await supabase
+      .from('products')
+      .insert([{
+        name: productName,
+        image_url: productDescription,
+        price: productPrice,
+        business_id: businessId
+      }])
+      .select()
+    if (data) {
+      console.log('new product', data[0])
+      onProductCreated(data[0])
+      setOpen(false)
     }
-        
+    if (error) console.error(error)
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

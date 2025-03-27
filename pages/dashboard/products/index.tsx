@@ -15,23 +15,19 @@ type Product = {
     price: number
 }
 
-export const columns: ColumnDef<Product>[] = [
-    {
-        accessorKey: "id",
-        header: "Id"
-    },
-    {
-        accessorKey: "name",
-        header: "Nombre",
-        cell: ({ row }) => {
-            return <Link href={`/dashboard/products/${row.getValue("id")}`} className="hover:underline">{row.getValue("name")}</Link>
-        }
-    },
-    {
-        accessorKey: "price",
-        header: "Precio"
+export const columns: ColumnDef<Product>[] = [{
+    accessorKey: "id",
+    header: "Id"
+}, {
+    accessorKey: "name",
+    header: "Nombre",
+    cell: ({ row }) => {
+        return <Link href={`/dashboard/products/${row.getValue("id")}`} className="hover:underline">{row.getValue("name")}</Link>
     }
-]
+}, {
+    accessorKey: "price",
+    header: "Precio"
+}]
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
@@ -68,13 +64,21 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 email: data.user.email,
                 name: 'name',
                 avatar: 'avatar'
-            }
+            },
+            businessId: businessData?.id
         }
     }
 }
 
-export default function Products({ data, user }: { data: any, user: any }) {
-    console.log(data)
+export default function Products({
+    data,
+    user,
+    businessId
+}: {
+    data: any,
+    user: any,
+    businessId: number
+}) {
     const [products, setProducts] = useState(data)
 
     function updateProductList(newProduct: any) {
@@ -84,7 +88,10 @@ export default function Products({ data, user }: { data: any, user: any }) {
     return (
         <Layout user={user}>
             <div className="flex justify-between">
-                <CreateProductDialog onProductCreated={updateProductList} />
+                <CreateProductDialog
+                    onProductCreated={updateProductList}
+                    businessId={businessId}
+                />
             </div>
             <DataTable columns={columns} data={products} />
         </Layout>
