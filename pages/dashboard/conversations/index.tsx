@@ -26,7 +26,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-
     const { data: businessData, error: businessError } = await supabase
         .from("business")
         .select("id")
@@ -35,7 +34,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (businessError) console.error("businessError", businessError)
     if (businessData) console.log("businessData", businessData)
-
 
     let { data: chats, error: chatError } = await supabase
         .from("chats")
@@ -86,7 +84,6 @@ export default function Conversations({ data, user }: { data: any, user: any }) 
                     conversations.length > 10 ?
                         <Pagination>
                             <PaginationContent>
-
                                 <PaginationItem>
                                     <PaginationPrevious href="#" />
                                 </PaginationItem>

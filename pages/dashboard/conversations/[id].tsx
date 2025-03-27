@@ -7,11 +7,7 @@ import utc from 'dayjs/plugin/utc'
 import Dify from "dify-js"
 import { createClient } from "@/lib/supabase/server-props";
 
-export default function Conversations() {
-    return (<>Conversations</>)
-}
-
-/* export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
     let { data, error } = await supabase.auth.getUser()
     if (error || !data) {
@@ -64,4 +60,4 @@ export default function Conversation({ user, messages }: { user: any, messages: 
             </div>
         </Layout>
     )
-} */
+}
