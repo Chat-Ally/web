@@ -58,7 +58,7 @@ export default function Setup(
     return (
         <div className="w-full h-screen flex justify-center items-center align-middle">
             <div className="bg-slate-50 dark:bg-neutral-900 rounded-md border border-neutral-700 p-8 md:p-16 mx-4">
-                <h1 className="font-bold text-2xl">Empecemos {businessData?.name} </h1>
+                <h1 className="font-bold text-2xl">Empecemos</h1>
                 <h2>Vamos a configurar algunos detalles de tu negocio</h2>
                 <div className="mt-2">
                     <Label htmlFor="business_name">Nombre de tu negocio</Label>

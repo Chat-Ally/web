@@ -5,7 +5,9 @@ import {
     House,
     MessageSquareText,
     Store,
-    ShoppingBasket
+    ShoppingBasket,
+    MessageCircle,
+    ShoppingBag
 } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
@@ -37,7 +39,7 @@ const data = {
         {
             title: "Ordenes",
             url: "/dashboard/orders",
-            icon: Store,
+            icon: ShoppingBag,
             id: 2
         },
         {
@@ -45,7 +47,17 @@ const data = {
             url: "/dashboard/products",
             icon: ShoppingBasket,
             id: 3
-        },
+        }, {
+            title: "Whatsapp",
+            url: "/dashboard/whatsapp",
+            icon: MessageCircle,
+            id: 4
+        }, {
+            title: "Mi Negocio",
+            url: "/dashboard/business",
+            icon: Store,
+            id: 5
+        }
     ],
 }
 
