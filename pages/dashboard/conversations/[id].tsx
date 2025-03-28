@@ -31,7 +31,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
         props: {
             messages: conversationHistoryMessages.data,
-            user: data
+            user: {
+                email: data.user?.email,
+                name: 'test name',
+                avatar: 'test avatar'
+            }
         }
     }
 }
