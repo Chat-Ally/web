@@ -7,7 +7,6 @@ import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 function ProductDetailsDialog({ open, onOpenChange, productDetails }: { open: boolean, onOpenChange: (val: boolean) => void, productDetails: any }) {
-    // if (!productDetails) return null;
     console.log(productDetails)
     const { toast } = useToast()
 

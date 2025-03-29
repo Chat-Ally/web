@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import HeroBanner from "@/components/shops/hero-banner";
 import HomeProducts from "@/components/shops/home-products";
 import { createClient } from "@/lib/supabase/server-props"
@@ -15,7 +16,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         .select("*")
         .eq("business_id", id)
         .limit(20)
-
     if (productsError) console.error("businessError", productsError)
     if (productsData) console.log("businessData", productsData)
 
@@ -32,11 +32,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Shop({ productList }: { productList: any[] }) {
-    // console.log("productList", productList)
     return (
         <div>
             <HeroBanner />
             <HomeProducts productList={productList} />
+            <Footer />
         </div>
     )
 }
