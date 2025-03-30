@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 
 interface CartItem {
-    id?: number;
+    id: number;
     name?: string;
     price?: number;
     quantity?: number;
@@ -13,6 +13,7 @@ interface CartContextValue {
     cartItems: CartItem[];
     addItem: (item: CartItem) => void;
     removeItem: (itemId: number) => void;
+    getSubtotal: () => number;
     updateQuantity: (itemId: number, newQuantity: number) => void;
     clearCart: () => void;
 }
@@ -48,12 +49,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         );
     };
 
+    const getSubtotal = () => {
+        return cartItems.reduce((total, item) => total + (item.price || 0) * (item.quantity || 0), 0);
+    };
+
     const clearCart = () => {
         setCartItems([]);
     };
 
     const contextValue: CartContextValue = {
         cartItems,
+        getSubtotal: getSubtotal,
         addItem: addItem,
         removeItem: removeItem,
         updateQuantity: updateQuantity,
