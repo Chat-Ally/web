@@ -1,7 +1,6 @@
 import { Card, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server-props"
 import { GetServerSidePropsContext } from "next"
-import Image from "next/image"
 import Link from "next/link"
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

@@ -6,10 +6,22 @@ import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "../ui/toast";
+import { useCart } from "./cart-context";
 
-function ProductDetailsDialog({ open, onOpenChange, productDetails }: { open: boolean, onOpenChange: (val: boolean) => void, productDetails: any }) {
+function ProductDetailsDialog({
+    open,
+    onOpenChange,
+    productDetails
+}: {
+    open: boolean,
+    onOpenChange: (val: boolean) => void,
+    productDetails: any
+}) {
+
+    const { addItem } = useCart()
     const { toast } = useToast()
     function handleAddtoCart() {
+        addItem(productDetails)
         toast({
             title: "Se agregó el producto a tu carrito.",
             action: (
