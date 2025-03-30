@@ -1,5 +1,8 @@
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
 import { Card, CardTitle } from "../ui/card";
+import { useCart } from "./cart-context";
+import { ToastAction } from "../ui/toast";
 
 function ProductPreview({
     product,
@@ -8,13 +11,27 @@ function ProductPreview({
     product: any,
     onClick: () => void
 }) {
+    const { addItem } = useCart()
+    const { toast } = useToast()
+
+    function handleAddtoCart() {
+        addItem(product)
+        toast({
+            title: "Se agregó el producto a tu carrito.",
+            action: (
+                <ToastAction altText="Ver carrito">Ver</ToastAction>
+            ),
+        })
+    }
+
+
     return (
         <Card className=" bg-white rounded-lg hover:shadow-lg transition-shadow duration-300">
-            <div
-                onClick={() => onClick()}
-                className="cursor-pointer h-full"
-            >
-                <div className="relative aspect-square overflow-hidden rounded-t-lg">
+            <div className="cursor-pointer h-full">
+                <div
+                    onClick={() => onClick()}
+                    className="relative aspect-square overflow-hidden rounded-t-lg"
+                >
                     <img
                         src={product?.image_url}
                         alt={product?.name}
@@ -28,7 +45,10 @@ function ProductPreview({
                 </div>
 
                 <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
-                    <CardTitle className="text-lg line-clamp-1">
+                    <CardTitle
+                        onClick={() => onClick()}
+                        className="text-lg line-clamp-1"
+                    >
                         {product?.name}
                     </CardTitle>
 
@@ -50,7 +70,7 @@ function ProductPreview({
                         </div>
 
                         <Button
-                            onClick={() => console.log(product?._id)}
+                            onClick={() => handleAddtoCart()}
                             size={"lg"}
                             className="w-full md:w-full py-1.5 px-3 text-sm bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-md transition-colors duration-200"
                         >

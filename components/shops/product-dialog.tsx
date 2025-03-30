@@ -5,12 +5,18 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "../ui/toast";
 
 function ProductDetailsDialog({ open, onOpenChange, productDetails }: { open: boolean, onOpenChange: (val: boolean) => void, productDetails: any }) {
-    console.log(productDetails)
     const { toast } = useToast()
-
-    function handleAddtoCart() { }
+    function handleAddtoCart() {
+        toast({
+            title: "Se agregó el producto a tu carrito.",
+            action: (
+                <ToastAction altText="Ver carrito">Ver</ToastAction>
+            ),
+        })
+    }
 
     function handelDialogClose() {
         onOpenChange(false)
@@ -64,7 +70,10 @@ function ProductDetailsDialog({ open, onOpenChange, productDetails }: { open: bo
                             )}
                         </div>
 
-                        <Button onClick={() => console.log(productDetails?._id)} className="w-full py-6 text-lg font-semibold hover:opacity-90 transition-opacity">
+                        <Button
+                            onClick={() => handleAddtoCart()}
+                            className="w-full py-6 text-lg font-semibold hover:opacity-90 transition-opacity"
+                        >
                             Add to Cart
                         </Button>
                     </div>
