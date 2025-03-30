@@ -22,7 +22,7 @@ export default function CartDialog() {
                         <DialogHeader className="w-2/3">
                             <DialogTitle>Carrito </DialogTitle>
                             {cartItems.map((el) => (
-                                CartItem(el)
+                                <CartItem product={el} key={el.id} />
                             ))}
                         </DialogHeader>
                         <OrderSummary />
