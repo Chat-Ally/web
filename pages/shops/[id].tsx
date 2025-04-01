@@ -53,7 +53,7 @@ export default function Shop({
         <div>
             <CartProvider>
                 <ShopNavbar business={businessData} />
-                <HeroBanner />
+                <HeroBanner banner_url={businessData.banner_url} />
                 <HomeProducts productList={productList} />
                 <Toaster />
                 <Footer />

@@ -12,7 +12,7 @@ export default function HomeProducts({ productList }: { productList: any[] }) {
     }
 
     return (
-        <div className="container mx-auto grid grid-cols-4 gap-4 mt-4 md:px-56">
+        <div className="container mx-auto grid md:grid-cols-4 gap-4 mt-4 md:px-56">
             {productList && productList.length > 0 ? productList.map((el: any) => (
                 <ProductPreview onClick={() => handleProductClick(el)} key={el.id} product={el} />
             )) : <></>}
