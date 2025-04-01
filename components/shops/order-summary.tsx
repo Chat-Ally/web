@@ -1,7 +1,11 @@
 import { Button } from "../ui/button"
 import { useCart } from "./cart-context"
 
-export default function OrderSummary() {
+export default function OrderSummary({
+    onClickNext
+}: {
+    onClickNext: () => void
+}) {
     const { getSubtotal } = useCart()
 
     return (
@@ -12,6 +16,7 @@ export default function OrderSummary() {
             <p>Envío: $29</p>
             <p>Total: ${getSubtotal() + 29}</p>
             <Button
+                onClick={() => onClickNext()}
                 variant={"secondary"}
                 className="w-full md:w-full"
                 size={"lg"}

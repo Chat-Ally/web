@@ -34,8 +34,8 @@ export default function Shops({ businessList }: { businessList: any }) {
         <div>
             <>Tiendas que venden enwhats </>
             {
-                businessList.map((el) => (
-                    <Card>
+                businessList.map((el: any) => (
+                    <Card key={el.id}>
                         <CardTitle>
                             <Link href={'/shops/' + el.id}>
                                 {el.name}
