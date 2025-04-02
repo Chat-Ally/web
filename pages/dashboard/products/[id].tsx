@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server-props";
 import Layout from "../../../components/layout";
 import { GetServerSidePropsContext } from "next";
+import ProductForm from "@/components/products/product-form";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const supabase = createClient(context)
@@ -14,19 +15,29 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
+    const { data: businessData, error: businessError } = await supabase
+        .from("business")
+        .select("*")
+        .eq("owner_id", user.user.id)
+        .single()
+
+    if (businessError) console.error(businessError)
+    if (businessData) console.log(businessData)
+
     const { id } = context.query
-    const { data, error } = await supabase
+    const { data: productData, error: productError } = await supabase
         .from("products")
         .select("*")
-        .eq("business_id", 1)
+        .eq("business_id", businessData.id)
         .eq("id", id)
         .single()
 
-    if (error) console.error(error)
+    if (productError) console.error(productError)
 
     return {
         props: {
-            data: data,
+            product: productData,
+            business: businessData,
             user: {
                 email: user.user.email,
                 name: 'name',
@@ -36,11 +47,25 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
 }
 
-export default function Product({ data, user }: { data: any, user: any }) {
-    console.log(data)
+export default function Product({
+    product,
+    user,
+    business
+}: {
+    product: any,
+    business: any,
+    user: any
+}) {
+
     return (
         <Layout user={user}>
-            <p>Product </p>
+            <div className="grid md:grid-cols-2">
+                <img className="rounded-lg max-w-96 aspect-square object-cover" src={product.image_url} />
+                <ProductForm
+                    businessId={business.id}
+                    productData={product}
+                />
+            </div>
         </Layout>
     )
 }
