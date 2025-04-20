@@ -65,7 +65,15 @@ export const columns: ColumnDef<Payment>[] = [
                 </Button>
             )
         },
-        cell: ({ row }: { row: any }) => <div className="lowercase">{row.original.phone.customer_phone_id.number}</div>,
+
+        cell: ({ row }: { row: any }) => {
+            console.log(row.original)
+            const phoneNumber = row.original?.phone?.customer_phone_id?.number || 'unnamed user';
+
+            return (
+                <div className="lowercase">{phoneNumber}</div>
+            )
+        }
     },
     {
         accessorKey: "total",
