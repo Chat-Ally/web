@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/component"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import PrivacyNotice from "./privacy-notice"
+import LoadingSpin from "../ui/loading-spin"
+import { toast } from "sonner"
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
     authType: "login" | "register";
@@ -22,12 +24,16 @@ export function LoginForm({
     const supabase = createClient()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmationEmaiSent, setConfirmationEmailSent] = useState(false)
+    const [confirmationEmailSent, setConfirmationEmailSent] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     async function login(e: any) {
         e.preventDefault()
+        setLoading(true)
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) {
+            toast.error(error.message)
+            setLoading(false)
             console.error(error)
         } else {
             router.push('/dashboard')
@@ -36,8 +42,13 @@ export function LoginForm({
 
     async function signUp(e: any) {
         e.preventDefault()
+        setLoading(true)
         const { data, error } = await supabase.auth.signUp({ email, password })
-        if (error) console.error(error)
+        if (error) {
+            toast.error(error.message)
+            setLoading(false)
+            console.error(error)
+        }
         if (data) setConfirmationEmailSent(true)
     }
 
@@ -67,7 +78,7 @@ export function LoginForm({
             <Card className="overflow-hidden">
                 <CardContent className="grid p-0 ">
                     {
-                        confirmationEmaiSent ?
+                        confirmationEmailSent ?
                             <div className="p-4">
                                 <CardTitle>Revisa el correo que te envíamos.</CardTitle>
                                 <p className="pt-4">Entra el enlace para confirmar tu cuenta.</p>
@@ -86,6 +97,7 @@ export function LoginForm({
                                             type="email"
                                             placeholder="ejemplo@gmail.com"
                                             value={email}
+                                            disabled={loading}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
                                         />
@@ -105,16 +117,21 @@ export function LoginForm({
                                             type="password"
                                             placeholder="contraseña"
                                             value={password}
+                                            disabled={loading}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                         />
                                     </div>
                                     <Button
                                         variant="default"
-                                        className="w-full"
+                                        disabled={loading}
+                                        className={`w-full`}
                                         onClick={strings[authType].action}
-                                    >
-                                        {strings[authType].buttonText}
+                                    >   
+                                        {
+                                            loading ? <LoadingSpin />:
+                                            strings[authType].buttonText
+                                        }
                                     </Button>
                                     <div className="text-center text-sm">
                                         {strings[authType].alternativeButtonText}{" "}
