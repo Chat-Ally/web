@@ -15,6 +15,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
+    const { data: profileData, error: userError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", data.user?.id)
+        .single()
+
     const { data: businessData, error: businessError } = await supabase
         .from("business")
         .select("*")
@@ -24,9 +30,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (businessError) console.error("businessError", businessError)
     if (businessData) console.log("businessData", businessData)
 
-
-
-
     return {
         props: {
             user: {
@@ -34,17 +37,25 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 name: 'test name',
                 avatar: 'test avatar'
             },
-            businessData: businessData
+            businessData: businessData,
+            profile: profileData
         }
 
     }
 }
 
-export default function Business({ user, businessData }: { user: any, businessData: any }) {
-    console.log(user)
+export default function Business({
+    user,
+    businessData,
+    profileData
+}: {
+    user: any,
+    profileData: any
+    businessData: any
+}) {
     return (
         <Layout user={user}>
-            <Setup businessData={businessData} />
+            <Setup profile={profileData} user={user} businessData={businessData} />
         </Layout>
     )
 }

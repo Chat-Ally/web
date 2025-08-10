@@ -14,11 +14,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     }
 
-    // There is 4 states:
-    // 1. New account: No business, no container, wapp not running
-    // 2. Incomplete setup: Business, no container, wapp not running
-    // 3. Incomplete setup: Business, container, Wapp not running
-    // 4. Setup complete Business, container, wapp running
+    const { data: profileData, error: userError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", data.user.id)
+        .single()
 
     // If business doesnt exist, stay here
     const { data: businessData, error: businessError } = await supabase
@@ -27,17 +27,32 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         .eq('owner_id', data.user.id)
         .single()
 
-    return {
-        props: {
-            businessData: businessData,
+    if (businessData === null) {
+        return {
+            props: {
+                user: data,
+                profile: profileData,
+                businessData: businessData,
+            }
+        }
+    } else {
+        return {
+            redirect: {
+                destination: '/dashboard',
+                permanent: false,
+            }
         }
     }
 }
 
 export default function SetupPage({
+    user,
+    profile,
     businessData,
 }: {
+    user: any,
+    profile: any,
     businessData: any,
 }) {
-    return <Setup businessData={businessData} />
+    return <Setup user={user} profile={profile} businessData={businessData} />
 }
