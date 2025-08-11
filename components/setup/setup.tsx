@@ -25,11 +25,12 @@ export default function Setup(
     const [businessName, setBusinessName] = useState<string>(businessData?.name ?? '')
     const [logo, setLogo] = useState()
 
-    async function createWAPPContainer() {
-        let req = await fetch('/api/container')
-        console.log(req)
-        let res = await req.json()
-        console.log(res)
+    async function createWAPPContainer(businessId: number) {
+        const { data, error } = await supabase
+            .from("whatsapp-containers")
+            .insert([{
+                business_id: businessId,
+            }])
     }
 
     async function updateBusiness() {
@@ -51,12 +52,29 @@ export default function Setup(
                 name: businessName,
                 owner_id: user.user?.id,
             }])
-            .select()
         if (error) {
             toast.error(error.message)
             return false
         }
         return true
+    }
+
+    async function getBusinessId() {
+        const { data, error } = await supabase
+            .from("business")
+            .select("id")
+            .eq("owner_id", user.user?.id)
+            .single()
+
+        if (error) {
+            console.error(error)
+            toast.error(error.message)
+            return null
+        }
+        if (data) {
+            return data.id
+        }
+        return null
     }
 
     async function createProfile() {
@@ -88,6 +106,10 @@ export default function Setup(
         if (!businessName || !name) return
         let isBusinessCreated = await createBusiness()
         let isProfileCreated = await createProfile()
+        if (isBusinessCreated) {
+            const bussindessId = await getBusinessId()
+            createWAPPContainer(bussindessId)
+        }
         if (isProfileCreated && isBusinessCreated) {
             router.push('/setup/qr')
         } else {
