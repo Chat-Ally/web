@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { createClient } from '@/lib/supabase/component';
 import Link from 'next/link';
-import { QRCodeCanvas } from 'qrcode.react';
 import { useEffect, useState } from 'react';
 
 export default function QR({
@@ -16,19 +15,8 @@ export default function QR({
 }) {
 
     const supabase = createClient()
-    const [qrCode, setQRCode] = useState()
+    const [qrCode, setQRCode] = useState() // QR Code is no longer a code, but a URL to the QR code image
     const [WAPPStatus, setWAPPStatus] = useState(false)
-
-    useEffect(() => {
-        async function createWAPPContainer() {
-            let req = await fetch('/api/container')
-            console.log(req)
-            let res = await req.json()
-            console.log(res)
-            // setContainerCreated(res.ok)
-        }
-        createWAPPContainer()
-    }, [])
 
     useEffect(() => {
         const channel = supabase.channel('qr')
@@ -67,17 +55,14 @@ export default function QR({
                     }
                 </CardHeader>
                 <CardContent>
-
                     {
                         WAPPStatus ?
                             <></>
                             :
                             qrCode ?
-                                <QRCodeCanvas
-                                    className='mx-auto mt-4'
-                                    size={256}
-                                    value={qrCode}
-                                />
+                                <div>
+                                    <img src={qrCode} className='mx-auto h-24 mt-4' alt='QR Code' />
+                                </div>
                                 :
                                 <>loading</>
                     }
